@@ -2,8 +2,8 @@ import sys
 import zmq
 
 def func(msg):
-    ip="169.254.183.6"
-    port="5555"
+    ip="INSERT_IP_ADDRESS"
+    port="INSERT PORT NUMBER"
     context=zmq.Context()
     sock=zmq.Socket(context,zmq.REQ)
     sock.connect("tcp://"+ip+":"+port)
