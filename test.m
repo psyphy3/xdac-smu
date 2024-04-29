@@ -1,3 +1,4 @@
+%% Code to test Nicsla XDAC-40U-R4G8
 tic
 %% ==Initialisations=======
 key="BEL-ULB40c001";
