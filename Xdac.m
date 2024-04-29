@@ -1,3 +1,5 @@
+%%Class to implement functionalities for nicslab XDAC-40U-R4G8
+
 classdef Xdac
     properties
         Key;
