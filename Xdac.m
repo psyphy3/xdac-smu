@@ -1,11 +1,9 @@
-%%Class to implement functionalities for nicslab XDAC-40U-R4G8
+%% Class to implement functionalities for nicslab XDAC-40U-R4G8
 
 classdef Xdac
     properties
         Key;
         Interface;
-        MaxV=2;
-        MaxC=2;
         MaxCh=40;
     end
 
@@ -48,7 +46,7 @@ classdef Xdac
             obj.sendreq(msg);
        end
 
-       function setZ(obj)
+       function setZ(obj) % Set zeros to all channels
            msg="ZERO";
 
            for ch=1:obj.MaxCh
@@ -58,73 +56,68 @@ classdef Xdac
 
        function setV(obj,ch,V)
            msg="SETV";
-           obj.temp2(msg,ch,V);
+           obj.temp_set(msg,ch,V);
        end
 
        function out=getV(obj,ch)
            msg="MEASV";
-           out=obj.temp1(msg,ch);
+           out=obj.temp_get(msg,ch);
 
        end
 
        function setC(obj,ch,C)
             msg="SETC";
-            obj.temp2(msg,ch,C);
+            obj.temp_set(msg,ch,C);
 
        end
 
        function out=getC(obj,ch)
             msg="MEASC";
-            out=obj.temp1(msg,ch);
+            out=obj.temp_get(msg,ch);
        end
 
        function setVth(obj,ch,V)
             msg="SETOVT";
-            obj.temp2(msg,ch,V);
+            obj.temp_set(msg,ch,V);
        end
 
        function setCth(obj,ch,C)
             msg="SETOCT";
-            obj.temp2(msg,ch,C);
+            obj.temp_set(msg,ch,C);
 
        end
 
        function setVr(obj,ch,r)
             msg="SETR";
-            obj.temp2(msg,ch,r);
+            obj.temp_set(msg,ch,r);
        end
 
         %===Dervied methods========
 
-        function CCmode(obj,chs,c)
-
-            for i=1:max(size(chs))
-                obj.setV(chs(i),obj.MaxV);
-                obj.setC(chs(i),c)
-            end
+        function CCmode(obj,chs,v_max,c)
+            msg=["SETV","SETC"];
+            obj.tempc(msg,chs,v_max,c);
         end
 
-        function CVmode(obj,chs,v)
+        function CVmode(obj,chs,v,c_max)
 
-            for i=1:max(size(chs))
-                obj.setC(chs(i),obj.MaxC);
-                obj.setV(chs(i),v)
-            end
+            msg=["SETC","SETV"];
+            obj.tempc(msg,chs,c_max,v);
         end
 
         %==Template methods========
 
-        function out=temp1(obj,msg,var1) % 1 variable template
+        function out=temp_get(obj,msg,ch) % template for get functions
            
-           if (isa(var1,'double'))
-                len=max(size(var1));
+           if (isa(ch,'double'))
+                len=max(size(ch));
                if len==1
-                    out=obj.sendreq(msg+":"+var1);
+                    out=obj.sendreq(msg+":"+ch);
 
               elseif len>1
                    out=zeros(1,len);
                    for i=1:len
-                       out(i)=obj.sendreq(msg+":"+var1(i));
+                       out(i)=obj.sendreq(msg+":"+ch(i));
                    end
                else
                    disp("Invalid input");
@@ -132,7 +125,7 @@ classdef Xdac
 
 
            else
-               if var1=="all"
+               if ch=="all"
                    out=zeros(1,obj.MaxCh);
                    for i=1:obj.MaxCh
                         out(i)=obj.sendreq(msg+":"+i);
@@ -148,16 +141,16 @@ classdef Xdac
           
         end
 
-        function out=temp2(obj,msg,var1,var2) % 2 variable template
+        function out=temp_set(obj,msg,ch,var1) % template for set functions
             
-           if (isa(var1,'double'))
-                len=max(size(var1));
+           if (isa(ch,'double'))
+                len=max(size(ch));
 
                if len==1
-                    out=obj.sendreq(msg+":"+var1+":"+var2);
+                    out=obj.sendreq(msg+":"+ch+":"+var1);
               elseif len>1
                    for i=1:len
-                       out=obj.sendreq(msg+":"+var1(i)+":"+var2(i));
+                       out=obj.sendreq(msg+":"+ch(i)+":"+var1(i));
                    end
                else
                    disp("Invalid input");
@@ -165,10 +158,44 @@ classdef Xdac
 
 
            else
-               if var1=="all"
+               if ch=="all"
 
                    for i=1:obj.MaxCh
-                        out=obj.sendreq(msg+":"+i+":"+var2);
+                        out=obj.sendreq(msg+":"+i+":"+var1);
+                   end
+
+               else
+                   disp("Invalid input");
+               end
+           
+
+           end
+        end
+
+        function tempc(obj,msg,ch,var1,var2) % template for cc and cv modes
+            
+           if (isa(ch,'double'))
+                len=max(size(ch));
+
+               if len==1
+                    obj.sendreq(msg(1)+":"+ch+":"+var1);
+                    obj.sendreq(msg(2)+":"+ch+":"+var2);
+              elseif len>1
+                   for i=1:len
+                       obj.sendreq(msg(1)+":"+ch(i)+":"+var1(i));
+                       obj.sendreq(msg(2)+":"+ch(i)+":"+var2(i));
+                   end
+               else
+                   disp("Invalid input");
+               end
+
+
+           else
+               if ch=="all"
+
+                   for i=1:obj.MaxCh
+                        obj.sendreq(msg(1)+":"+i+":"+var1);
+                        obj.sendreq(msg(2)+":"+i+":"+var2);
                    end
 
                else
@@ -179,4 +206,6 @@ classdef Xdac
            end
         end
     end
+
+    
 end
