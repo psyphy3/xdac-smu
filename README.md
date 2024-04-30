@@ -1,6 +1,4 @@
-# multi-channel-smu
-
-Code for multichannel source measurement unit, Nicslab XDAC-40U-R4G8.
+# Code for multichannel source measurement unit, Nicslab XDAC-40U-R4G8.
 
 This is not an official code from nicslab. 
 
