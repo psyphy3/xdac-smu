@@ -2,8 +2,8 @@
 
 tic
 %% ==Initialisations=======
-key="YOUR_KEY";
-ip="YOUR_IP";
+key="INSERT_KEY";
+ip="INSERT_IP_ADDRESS";
 x1=Xdac(ip,key);
 
 %% ==First time procedures===
