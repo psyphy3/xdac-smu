@@ -2,7 +2,7 @@
 
 tic
 %% ==Initialisations=======
-key="YOUR_KEY";
+key="INSERT KEY";
 inter="interface.py";
 x1=Xdac(key,inter);
 
