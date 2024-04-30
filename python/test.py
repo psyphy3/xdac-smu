@@ -3,9 +3,9 @@ import time
 from xdac import Xdac
 
 #==Initialisation==========
-ip="169.254.183.6"
+ip="YOUR_IP"
 port="5555"
-key="BEL-ULB40c001"
+key="YOUR_KEY"
 x1=Xdac(ip,port)
 
 
