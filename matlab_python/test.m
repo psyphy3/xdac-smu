@@ -13,9 +13,9 @@ x1.setVth('all',4);
 x1.setCth('all',3);
 x1.CCmode('all',6,2);
 
-% ===Main body=========
+%% ===Main body=========
 
-X1.setV(2,3);
+x1.setV(2,3);
 V=x1.getV(2);
 
 
