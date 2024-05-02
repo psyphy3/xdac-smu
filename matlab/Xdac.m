@@ -12,10 +12,7 @@ classdef Xdac
     methods
         %==General methods=====
         function obj=Xdac(ip,key)
-            
-            obj.Ip=ip;
-            obj.Key=key;
-            
+                        
             ctx = zmq.core.ctx_new();
             % Create Request Socket
             req_socket = zmq.core.socket(ctx, 'ZMQ_REQ');
@@ -23,9 +20,11 @@ classdef Xdac
             zmq.core.connect(req_socket, req_address);
             % Create Subscribe Socket
             sub_socket = zmq.core.socket(ctx, 'ZMQ_SUB');
-            sub_address = ['tcp://' XDAC_IP ':5556'];
+            sub_address = ['tcp://' ip ':5556'];
             zmq.core.connect(sub_socket, sub_address);
 
+            obj.Ip=ip;
+            obj.Key=key;
             obj.Req=req_socket;
             obj.Sub=sub_socket;
         end
