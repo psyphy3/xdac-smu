@@ -2,6 +2,7 @@
 
 tic
 %% ==Initialisations=======
+addpath (".\lib");
 key="INSERT_KEY";
 ip="INSERT_IP_ADDRESS";
 x1=Xdac(ip,key);
