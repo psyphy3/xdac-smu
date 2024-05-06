@@ -12,21 +12,19 @@ classdef Xdac
     methods
         %==General methods=====
         function obj=Xdac(ip,key)
-                        
+            
+            
+            
             ctx = zmq.core.ctx_new();
             % Create Request Socket
             req_socket = zmq.core.socket(ctx, 'ZMQ_REQ');
             req_address = ['tcp://' ip ':5555'];
             zmq.core.connect(req_socket, req_address);
-            % Create Subscribe Socket
-            sub_socket = zmq.core.socket(ctx, 'ZMQ_SUB');
-            sub_address = ['tcp://' ip ':5556'];
-            zmq.core.connect(sub_socket, sub_address);
+            
 
             obj.Ip=ip;
             obj.Key=key;
             obj.Req=req_socket;
-            obj.Sub=sub_socket;
         end
 
         function out=sendreq(obj,msg)
@@ -36,6 +34,7 @@ classdef Xdac
             
             msg_recv=zmq.core.recv(obj.Req);
             out=native2unicode(msg_recv, "UTF-8");
+            out=str2double(out);
         end
 
         %==SCPI methods========
@@ -141,7 +140,7 @@ classdef Xdac
 
            else
                if ch=="all"
-                   out=zeros(1,obj.MaxCh);
+                   out=zeros(obj.MaxCh,1);
                    for i=1:obj.MaxCh
                         out(i)=obj.sendreq(msg+":"+i);
                    end
